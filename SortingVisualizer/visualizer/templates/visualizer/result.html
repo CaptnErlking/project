@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ algorithm }} Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #1e1e1e; /* Dark grey background */
+            color: #ffffff; /* White text */
+            font-family: "Courier New", Courier, monospace; /* Terminal font */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Keep heading at the top */
+            height: 100vh;
+            margin: 0;
+            padding: 20px; /* Add padding around the content */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin: 10px 0 20px; /* Add spacing above and below */
+            text-align: center; /* Ensure it's centered */
+        }
+
+        canvas {
+            max-width: 90%; /* Limit width to fit within viewport */
+            max-height: 70%; /* Limit height to avoid overflow */
+            border: 1px solid #ffffff; /* White border around the canvas */
+        }
+
+        .go-back-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-family: "Courier New", Courier, monospace;
+            color: #ffffff;
+            background-color: #333333;
+            border: 2px solid #555555;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .go-back-button:hover {
+            background-color: #555555;
+            color: #00ff00; /* Green on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ algorithm }} Visualization</h1>
+    <canvas id="sortingChart"></canvas>
+
+    <!-- Go Back Button -->
+    <a href="/" class="go-back-button">Go Back</a>
+
+    <!-- Inject steps using Django's json_script -->
+    <script id="steps-data" type="application/json">
+        {{ steps|safe }}
+    </script>
+
+    <script>
+        const steps = JSON.parse(document.getElementById('steps-data').textContent);
+
+        const ctx = document.getElementById('sortingChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Array(steps[0].length).fill(''), // Empty labels to hide indices
+                datasets: [
+                    {
+                        label: '',
+                        data: steps[0], // Initialize with the first step
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                plugins: {
+                    legend: { display: false }, // Hide legend
+                },
+                scales: {
+                    x: {
+                        grid: { display: false }, // Hide vertical gridlines
+                        ticks: { display: false }, // Hide x-axis ticks
+                    },
+                    y: {
+                        grid: { display: false }, // Hide horizontal gridlines
+                        ticks: { display: false }, // Hide y-axis ticks
+                    },
+                },
+                layout: {
+                    padding: 10, // Add padding around the chart
+                },
+                maintainAspectRatio: true, // Ensure it scales nicely
+            },
+        });
+
+        let stepIndex = 0;
+
+        function updateChart() {
+            if (stepIndex < steps.length) {
+                chart.data.datasets[0].data = steps[stepIndex]; // Update the chart data
+                chart.update(); // Refresh the chart
+                stepIndex++;
+                const delay = "{{ algorithm }}" === "Merge Sort" ? 100 : 300; // Adjust delay for Merge Sort
+                setTimeout(updateChart, delay);
+            }
+        }
+
+        updateChart();
+    </script>
+</body>
+</html>

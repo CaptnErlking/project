@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer</title>
+    <style>
+        body {
+            background-color: #1e1e1e; /* Dark grey background */
+            color: #ffffff; /* White text */
+            font-family: "Courier New", Courier, monospace; /* Terminal font */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center everything vertically */
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Add spacing between elements */
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #ffffff;
+            background-color: #333333;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .algorithm-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Spacing between buttons */
+            justify-content: center;
+        }
+
+        .algorithm-buttons button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-family: "Courier New", Courier, monospace;
+            color: #ffffff;
+            background-color: #333333;
+            border: 2px solid #555555;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .algorithm-buttons button:hover {
+            background-color: #555555; /* Slightly lighter grey on hover */
+            color: #00ff00; /* Green text on hover */
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-family: "Courier New", Courier, monospace;
+            color: #ffffff;
+            background-color: #333333;
+            border: 2px solid #555555;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555555;
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sorting Visualizer</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="size">Array Size:</label>
+        <input type="number" id="size" name="size" min="2" required>
+
+        <div class="algorithm-buttons">
+            <button type="submit" name="algorithm" value="Insertion Sort">Insertion Sort</button>
+            <button type="submit" name="algorithm" value="Bubble Sort">Bubble Sort</button>
+            <button type="submit" name="algorithm" value="Quick Sort">Quick Sort</button>
+            <button type="submit" name="algorithm" value="Merge Sort">Merge Sort</button>
+            <button type="submit" name="algorithm" value="Heap Sort">Heap Sort</button>
+            <button type="submit" name="algorithm" value="Cycle Sort">Cycle Sort</button>
+            <button type="submit" name="algorithm" value="Radix Sort">Radix Sort</button>
+            <button type="submit" name="algorithm" value="Counting Sort">Counting Sort</button>
+        </div>
+    </form>
+</body>
+</html>
