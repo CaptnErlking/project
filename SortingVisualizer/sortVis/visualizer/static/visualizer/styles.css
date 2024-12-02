@@ -1,0 +1,9 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.bar {
+    background-color: #3498db;
+    width: 10px;
+    margin: 2px;
+    display: inline-block;
+}
