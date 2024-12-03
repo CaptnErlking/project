@@ -7,28 +7,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #1e1e1e; /* Dark grey background */
-            color: #ffffff; /* White text */
-            font-family: "Courier New", Courier, monospace; /* Terminal font */
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: "Courier New", Courier, monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Keep heading at the top */
+            justify-content: flex-start;
             height: 100vh;
             margin: 0;
-            padding: 20px; /* Add padding around the content */
+            padding: 20px;
             box-sizing: border-box;
         }
 
         h1 {
-            margin: 10px 0 20px; /* Add spacing above and below */
-            text-align: center; /* Ensure it's centered */
+            margin: 10px 0 20px;
+            text-align: center;
         }
 
         canvas {
-            max-width: 90%; /* Limit width to fit within viewport */
-            max-height: 70%; /* Limit height to avoid overflow */
-            border: 1px solid #ffffff; /* White border around the canvas */
+            max-width: 90%;
+            max-height: 70%;
+            border: 1px solid #ffffff;
         }
 
         .go-back-button {
@@ -50,34 +50,41 @@
 
         .go-back-button:hover {
             background-color: #555555;
-            color: #00ff00; /* Green on hover */
+            color: #00ff00;
         }
+
+        #execution-time {
+            font-size: 20px;
+            color: #0474a0;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 20px;
+        }
+
+        
     </style>
 </head>
 <body>
     <h1>{{ algorithm }} Visualization</h1>
+    <p id="execution-time"></p>
     <canvas id="sortingChart"></canvas>
-
-    <!-- Go Back Button -->
     <a href="/" class="go-back-button">Go Back</a>
 
-    <!-- Inject steps using Django's json_script -->
     <script id="steps-data" type="application/json">
         {{ steps|safe }}
     </script>
-
     <script>
         const steps = JSON.parse(document.getElementById('steps-data').textContent);
+        const timeTaken = "{{ time_taken }}"; // Fetch time taken from the backend
 
         const ctx = document.getElementById('sortingChart').getContext('2d');
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: Array(steps[0].length).fill(''), // Empty labels to hide indices
+                labels: Array(steps[0].length).fill(''),
                 datasets: [
                     {
                         label: '',
-                        data: steps[0], // Initialize with the first step
+                        data: steps[0],
                         backgroundColor: 'rgba(75, 192, 192, 0.8)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
@@ -86,38 +93,53 @@
             },
             options: {
                 plugins: {
-                    legend: { display: false }, // Hide legend
+                    legend: { display: false },
                 },
                 scales: {
                     x: {
-                        grid: { display: false }, // Hide vertical gridlines
-                        ticks: { display: false }, // Hide x-axis ticks
+                        grid: { display: false },
+                        ticks: { display: false },
                     },
                     y: {
-                        grid: { display: false }, // Hide horizontal gridlines
-                        ticks: { display: false }, // Hide y-axis ticks
+                        grid: { display: false },
+                        ticks: { display: false },
                     },
                 },
                 layout: {
-                    padding: 10, // Add padding around the chart
+                    padding: 10,
                 },
-                maintainAspectRatio: true, // Ensure it scales nicely
+                maintainAspectRatio: true,
             },
         });
 
         let stepIndex = 0;
 
+        const totalDuration = 10000; // 10 seconds in milliseconds
+        const delay = totalDuration / steps.length;
+
         function updateChart() {
             if (stepIndex < steps.length) {
-                chart.data.datasets[0].data = steps[stepIndex]; // Update the chart data
-                chart.update(); // Refresh the chart
+                chart.data.datasets[0].data = steps[stepIndex];
+                chart.update();
                 stepIndex++;
-                const delay = "{{ algorithm }}" === "Merge Sort" ? 100 : 300; // Adjust delay for Merge Sort
-                setTimeout(updateChart, delay);
+                setTimeout(updateChart, delay); // Adjusted delay to fit within 10 seconds
             }
         }
-
         updateChart();
+
+        // Typing animation for the blazing time text
+        const text = `🔥 This algorithm took a blazing ${timeTaken} seconds! 🔥`;
+        const executionTimeElement = document.getElementById('execution-time');
+        let charIndex = 0;
+
+        function animateText() {
+            if (charIndex < text.length) {
+                executionTimeElement.textContent += text[charIndex];
+                charIndex++;
+                setTimeout(animateText, 50); // Speed of character animation
+            }
+        }
+        animateText();
     </script>
 </body>
 </html>
