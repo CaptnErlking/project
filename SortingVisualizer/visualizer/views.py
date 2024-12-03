@@ -43,7 +43,7 @@ def quick_sort(arr, callback):
     quick_sort_rec(0, len(arr) - 1)
 
 def merge_sort(arr, callback):
-    # Make a global copy of the array for tracking purposes
+    
     global_array = arr.copy()
 
     def merge(left, right, start_index):
@@ -51,7 +51,6 @@ def merge_sort(arr, callback):
         i = 0
         j = 0
 
-        # Compare and merge left and right subarrays
         while i < len(left) and j < len(right):
             if left[i] <= right[j]:
                 result.append(left[i])
@@ -62,9 +61,8 @@ def merge_sort(arr, callback):
                 global_array[start_index] = right[j]
                 j += 1
             start_index += 1
-            callback(global_array.copy())  # Record the state of the array
+            callback(global_array.copy()) 
 
-        # Append remaining elements of left
         while i < len(left):
             result.append(left[i])
             global_array[start_index] = left[i]
@@ -72,7 +70,6 @@ def merge_sort(arr, callback):
             start_index += 1
             callback(global_array.copy())
 
-        # Append remaining elements of right
         while j < len(right):
             result.append(right[j])
             global_array[start_index] = right[j]
@@ -92,8 +89,6 @@ def merge_sort(arr, callback):
         return merge(left, right, start_index)
 
     merge_sort_rec(arr)
-
-# Test Merge Sort with the callback
 
 def heap_sort(arr, callback):
     def heapify(n, i):
