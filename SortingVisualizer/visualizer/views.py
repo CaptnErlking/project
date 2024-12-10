@@ -73,21 +73,17 @@ def cycle_sort_t(arr):
         item = arr[cycle_start]
         pos = cycle_start
 
-        # Find position for the item
         for i in range(cycle_start + 1, n):
             if arr[i] < item:
                 pos += 1
 
-        # Skip if item is already in the correct position
         if pos == cycle_start:
             continue
 
-        # Swap item with the correct position
         while item == arr[pos]:
             pos += 1
         arr[pos], item = item, arr[pos]
 
-        # Rotate the remaining cycle
         while pos != cycle_start:
             pos = cycle_start
             for i in range(cycle_start + 1, n):
@@ -99,50 +95,42 @@ def cycle_sort_t(arr):
 
 def heap_sort_t(arr):
     def heapify(n, i):
-        largest = i  # Initialize largest as root
-        l = 2 * i + 1  # Left child
-        r = 2 * i + 2  # Right child
+        largest = i 
+        l = 2 * i + 1  
+        r = 2 * i + 2 
 
-        # Check if left child exists and is greater
         if l < n and arr[l] > arr[largest]:
             largest = l
 
-        # Check if right child exists and is greater
         if r < n and arr[r] > arr[largest]:
             largest = r
 
-        # Change root if needed
         if largest != i:
             arr[i], arr[largest] = arr[largest], arr[i]
             heapify(n, largest)
 
     n = len(arr)
 
-    # Build max heap
     for i in range(n // 2 - 1, -1, -1):
         heapify(n, i)
 
-    # Extract elements one by one
     for i in range(n - 1, 0, -1):
-        arr[i], arr[0] = arr[0], arr[i]  # Swap
+        arr[i], arr[0] = arr[0], arr[i] 
         heapify(i, 0)
 
 def radix_sort_t(arr):
     def counting_sort(arr, exp):
         n = len(arr)
-        output = [0] * n  # Output array
-        count = [0] * 10  # Count array for digits (0-9)
+        output = [0] * n 
+        count = [0] * 10 
 
-        # Count occurrences of each digit
         for i in range(n):
             index = (arr[i] // exp) % 10
             count[index] += 1
 
-        # Update count array to contain actual positions
         for i in range(1, 10):
             count[i] += count[i - 1]
 
-        # Build the output array
         i = n - 1
         while i >= 0:
             index = (arr[i] // exp) % 10
@@ -150,13 +138,11 @@ def radix_sort_t(arr):
             count[index] -= 1
             i -= 1
 
-        # Copy output array back to original array
         for i in range(n):
             arr[i] = output[i]
 
-    # Find maximum number to determine the number of digits
     max_val = max(arr)
-    exp = 1  # Start with the least significant digit
+    exp = 1 
     while max_val // exp > 0:
         counting_sort(arr, exp)
         exp *= 10
@@ -166,28 +152,22 @@ def counting_sort_t(arr):
     min_val = min(arr)
     range_val = max_val - min_val + 1
 
-    # Initialize count array and output array
     count = [0] * range_val
     output = [0] * len(arr)
 
-    # Count occurrences of each value
     for num in arr:
         count[num - min_val] += 1
 
-    # Update count array to contain actual positions
     for i in range(1, range_val):
         count[i] += count[i - 1]
 
-    # Build the output array
     for num in reversed(arr):
         output[count[num - min_val] - 1] = num
         count[num - min_val] -= 1
 
-    # Copy sorted elements back to original array
     for i in range(len(arr)):
         arr[i] = output[i]
 
-# Sorting Algorithms
 def insertion_sort(arr, callback):
     for i in range(1, len(arr)):
         key = arr[i]
@@ -381,21 +361,17 @@ time_map = {
     "Counting Sort": counting_sort_t,
 }
 
-# Measure execution time and return the time taken, without handling the callback
 def execute_sorting_with_time_and_steps(algorithm, arr, callback):
-    steps = []  # To store the steps of sorting
+    steps = []  
 
-    # Wrapper function to capture steps during sorting
     def step_callback(current_arr):
         steps.append(current_arr)
 
-    # Time measurement function
     def time_callback(current_arr):
         return time.time()
 
-    # Measure time and capture sorting steps
     start_time = time.time()
-    algorithm(arr, step_callback)  # Algorithm with callback for capturing steps
+    algorithm(arr, step_callback)
     time_taken = time.time() - start_time
 
     return steps, time_taken
@@ -408,24 +384,21 @@ def home(request):
 
         steps = []
 
-        # Define a callback function to capture the steps
         def callback(current_arr):
             steps.append(current_arr)
 
-        # Determine the algorithm function to use for sorting
         algorithm_function = algorithm_map.get(algorithm)
         if not algorithm_function:
             return render(request, 'visualizer/home.html', {
                 'error': "Invalid algorithm selected."
             })
 
-        # Execute the sorting with both steps and time measurement
         steps, time_taken = execute_sorting_with_time_and_steps(algorithm_function, arr.copy(), callback)
 
         return render(request, 'visualizer/result.html', {
             'steps': json.dumps(steps),
             'algorithm': algorithm,
-            'time_taken': f"{time_taken: } ",  # Display time with 4 decimal places
+            'time_taken': f"{time_taken: } ", 
         })
 
     return render(request, 'visualizer/home.html')
