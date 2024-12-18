@@ -53,27 +53,53 @@
             color: #00ff00;
         }
 
-        #execution-time {
+        .hidden-button {
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-family: "Courier New", Courier, monospace;
+            color: #1e1e1e;
+            background-color: #1e1e1e; /* Matches background to blend */
+            border: 2px solid #1e1e1e; /* Matches background to blend */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        .hidden-button:hover {
+            background-color: #555555;
+            color: #00ff00;
+            border-color: #555555;
+        }
+
+        #execution-time, #original-array {
             font-size: 20px;
             color: #0474a0;
             font-family: 'Courier New', monospace;
             margin-bottom: 20px;
+            text-align: center;
         }
-
-        
     </style>
 </head>
 <body>
     <h1>{{ algorithm }} Visualization</h1>
     <p id="execution-time"></p>
+    <p id="original-array" style="display: none;"></p>
     <canvas id="sortingChart"></canvas>
     <a href="/" class="go-back-button">Go Back</a>
+    <button class="hidden-button" id="show-original-array">Show Original Array</button>
 
     <script id="steps-data" type="application/json">
         {{ steps|safe }}
     </script>
+    <script id="original-array-data" type="application/json">
+        {{ arr|safe }}
+    </script>
     <script>
         const steps = JSON.parse(document.getElementById('steps-data').textContent);
+        const originalArray = JSON.parse(document.getElementById('original-array-data').textContent);
         const timeTaken = "{{ time_taken }}";
     
         const ctx = document.getElementById('sortingChart').getContext('2d');
@@ -113,8 +139,8 @@
         });
     
         let stepIndex = 0;
-    
-        const totalDuration = 10000;
+        
+        const totalDuration = steps.length < 25 ? 5000 : 10000;
         const delay = totalDuration / steps.length;
     
         function updateChart() {
@@ -132,16 +158,34 @@
             const text = `🔥 This algorithm took a blazing ${timeTaken} seconds! 🔥`;
             let charIndex = 0;
     
-            function animateText() {
-                if (charIndex < text.length) {
-                    executionTimeElement.textContent += text[charIndex];
+            function animateText(element, textToAnimate) {
+                if (charIndex < textToAnimate.length) {
+                    element.textContent += textToAnimate[charIndex];
                     charIndex++;
-                    setTimeout(animateText, 50);
+                    setTimeout(() => animateText(element, textToAnimate), 50);
                 }
             }
-            animateText();
+            animateText(executionTimeElement, text);
         }
+
+        const originalArrayElement = document.getElementById('original-array');
+        const showOriginalArrayButton = document.getElementById('show-original-array');
+
+        showOriginalArrayButton.addEventListener('click', () => {
+            showOriginalArrayButton.style.display = 'none'; // Hide the button after clicking
+            originalArrayElement.style.display = 'block';
+            const text = `🌟 Original Array: ${originalArray.join(', ')} 🌟`;
+            let charIndex = 0;
+
+            function animateTextOriginal() {
+                if (charIndex < text.length) {
+                    originalArrayElement.textContent += text[charIndex];
+                    charIndex++;
+                    setTimeout(animateTextOriginal, 50);
+                }
+            }
+            animateTextOriginal();
+        });
     </script>
-    
 </body>
 </html>

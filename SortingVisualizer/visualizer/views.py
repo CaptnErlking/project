@@ -398,7 +398,8 @@ def home(request):
         return render(request, 'visualizer/result.html', {
             'steps': json.dumps(steps),
             'algorithm': algorithm,
-            'time_taken': f"{time_taken: }", 
+            'time_taken': f"{time_taken: }",
+            'arr' : arr, 
         })
 
     return render(request, 'visualizer/home.html')
