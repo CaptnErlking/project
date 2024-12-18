@@ -74,8 +74,8 @@
     </script>
     <script>
         const steps = JSON.parse(document.getElementById('steps-data').textContent);
-        const timeTaken = "{{ time_taken }}"; // get the time taken by the actual algorithm
-
+        const timeTaken = "{{ time_taken }}";
+    
         const ctx = document.getElementById('sortingChart').getContext('2d');
         const chart = new Chart(ctx, {
             type: 'bar',
@@ -111,12 +111,12 @@
                 maintainAspectRatio: true,
             },
         });
-
+    
         let stepIndex = 0;
-
+    
         const totalDuration = 10000;
         const delay = totalDuration / steps.length;
-
+    
         function updateChart() {
             if (stepIndex < steps.length) {
                 chart.data.datasets[0].data = steps[stepIndex];
@@ -126,19 +126,22 @@
             }
         }
         updateChart();
-
-        const text = `🔥 This algorithm took a blazing ${timeTaken} seconds! 🔥`;
+    
         const executionTimeElement = document.getElementById('execution-time');
-        let charIndex = 0;
-
-        function animateText() {
-            if (charIndex < text.length) {
-                executionTimeElement.textContent += text[charIndex];
-                charIndex++;
-                setTimeout(animateText, 50);
+        if (parseFloat(timeTaken) > 0) { 
+            const text = `🔥 This algorithm took a blazing ${timeTaken} seconds! 🔥`;
+            let charIndex = 0;
+    
+            function animateText() {
+                if (charIndex < text.length) {
+                    executionTimeElement.textContent += text[charIndex];
+                    charIndex++;
+                    setTimeout(animateText, 50);
+                }
             }
+            animateText();
         }
-        animateText();
     </script>
+    
 </body>
 </html>
