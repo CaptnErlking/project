@@ -27,9 +27,4 @@ A Discord bot that helps track Pokémon encounters, logs IV percentages, and pro
 
 ---
 
-<<<<<<< HEAD
 Both projects showcase different technical skills—one in web development and algorithm visualization, and the other in bot automation and Discord API integration.
-
-=======
-Both projects showcase different technical skills—one in web development and algorithm visualization, and the other in bot automation and Discord API integration.
->>>>>>> 634002c15211230a9983ec08a07bc9fe2648d14b
