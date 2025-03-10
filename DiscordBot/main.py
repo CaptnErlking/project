@@ -133,13 +133,8 @@ async def hunt_mode_command(ctx):
         "Choose your hunt mode:\n:regional_indicator_s: Shiny Hunt (Ditto, Arctozolt, Arctovish, and Dracovish messages will not show up)\n:regional_indicator_h: Pokemon Hunt (All messages will show up)"
     )
 
-<<<<<<< HEAD
-    await message.add_reaction("\U0001f1f8") 
-    await message.add_reaction("\U0001f1ed") 
-=======
     await message.add_reaction("\U0001f1f8")  # :regional_indicator_s:
     await message.add_reaction("\U0001f1ed")  # :regional_indicator_h:
->>>>>>> 634002c15211230a9983ec08a07bc9fe2648d14b
 
     def check(reaction, user):
         return (
@@ -151,19 +146,11 @@ async def hunt_mode_command(ctx):
     try:
         reaction, user = await bot.wait_for("reaction_add", timeout=60.0, check=check)
 
-<<<<<<< HEAD
-        if str(reaction.emoji) == "\U0001f1f8": 
-            hunt_mode = "S"
-            await message.edit(content="Hunt mode set to Shiny Hunt. Messages for Ditto, Arctozolt, Arctovish, and Dracovish will not show up.")
-
-        elif str(reaction.emoji) == "\U0001f1ed":
-=======
         if str(reaction.emoji) == "\U0001f1f8":  # :regional_indicator_s:
             hunt_mode = "S"
             await message.edit(content="Hunt mode set to Shiny Hunt. Messages for Ditto, Arctozolt, Arctovish, and Dracovish will not show up.")
 
         elif str(reaction.emoji) == "\U0001f1ed":  # :regional_indicator_h:
->>>>>>> 634002c15211230a9983ec08a07bc9fe2648d14b
             hunt_mode = "H"
             await message.edit(content="Hunt mode set to Pokemon Hunt. All messages will show up.")
 
